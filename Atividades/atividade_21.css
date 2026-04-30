@@ -1,0 +1,60 @@
+.ativo{
+    background-color: lightpink;
+    color: mediumblue;
+}
+
+.destaque{
+    border: solid 5px black;
+    background-color: darkorange;
+}
+
+.grande{
+    font-size: large;
+}
+
+.sumido{
+    display: none;
+}
+
+.quadrado{
+    height: 50px;
+    width: 50px;
+    margin:  5px 10px;
+    border: solid 5px black;
+}
+.selecionar{
+    background-color: powderblue;
+}
+#selecionado{
+    background: none;
+    height: 50px;
+    width: 50px;
+    border:none;
+}
+.dark{
+    background-color: black;
+    color: white;
+}
+.menu{
+    display: none;
+}
+.retangulo{
+    height: 50px;
+    width: 100px;
+    border: solid 1px;
+}
+.color{
+    background-color: darkkhaki;
+}
+.boder{
+    border: solid 5px;
+}
+.vermelho{
+    background-color: red;
+}
+.azul{
+    background-color: rgb(0, 140, 255);
+}
+.verde{
+    background-color: greenyellow;
+}
