@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="popUp.css">
+</head>
+
+<body>
+
+    <button onclick="abrirPopUp()">Logar</button>
+    <div class="popUp" id="popUp">
+        <div class="conteudo">
+            <h2>Login</h2>
+            <p>Email:</p>
+            <input type="text" placeholder="Email...." name="" id="">
+            <p>Senha:</p>
+            <input type="text" placeholder="Senha...." name="" id=""> <br>
+            <button onclick="fecharPopUp()">Entrar</button>
+        </div>
+    </div>
+    <hr>
+    <button onclick="abrirPopp()">Deletar</button>
+    <div class="popUp" id="popp">
+        <div class="conteudo">
+            <h2>Solicitasão de exclução</h2>
+            <p>Deseja realmente excluir este arquivo?</p>
+            <div class="aaaaaa">
+                <button onclick="fecharPopUp()">Sim</button>
+                <p>ou</p>
+                <button onclick="fecharPopp()">Não</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <button onclick="abrirPopUpImg()"><img src="img/channels4_profile.jpg" alt="" class="anao"></button>
+    <div id="imgpopImg" class="popUp">
+        <button onclick="fecharPopUpImg()"><img src="img/channels4_profile.jpg" alt=""></button>
+    </div>
+    <hr>
+    <button onclick="abrirPopUpCimento()">Busca comer cimento</button>
+    <div class="popUp" id="popUpBloco">
+        <div class="conteudo">
+            <h2>Curiosidades concretas</h2>
+            <p>Estima-se que o cimento começou a ser utilizado há 4.500 anos. É claro que era em uma forma diferente da que encontramos hoje, pois estudiosos da Construção Civil desenvolveram diversas fórmulas para esta matéria-prima ao longo dos séculos.</p>
+            <button onclick="fecharPopUpCimento()">Acabar com o cimento</button>
+        </div>
+    </div>
+    <input type="text" name="" id="verificando">
+    <button onclick="abrirPopUpSenha()">Verificar</button>
+
+    <script src="popUp.js"></script>
+</body>
+
+</html>

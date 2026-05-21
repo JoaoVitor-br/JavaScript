@@ -1,0 +1,13 @@
+.carrossel {
+    width: 500px;
+    overflow: hidden;
+    position: relative;
+
+}
+img{
+    width: 100%;
+    display: none;
+}
+.ativa {
+    display: block;
+}
