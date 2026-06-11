@@ -1,0 +1,11 @@
+let numero = 0
+
+function intervalo() {
+    numero += 100;
+    document.getElementById("contador").innerText = numero;
+
+    if (numero >= 10000) {
+        clearInterval(intervelo);
+    }
+}
+let intervelo = setInterval(intervalo, 100)

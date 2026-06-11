@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grill Master - Dia do Hambúrguer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="cabecalho">
+        <img src="imagens/HAMBURGUERIA - GRILL MASTER.png" alt="Logo Grill Master" class="logo">
+        <div>
+            <h1>Grill Master</h1>
+            <p class="evento">Dia Mundial do Hambúrguer - 28 de maio</p>
+        </div>
+    </header>
+
+    <main class="conteudo-principal">
+        <section class="chamada">
+            <h2>Venha celebrar com a família</h2>
+            <p>O evento do Dia do Hambúrguer está chegando. Reserve sua mesa para garantir atendimento para você e sua família.</p>
+            <button class="botao-reserva" id="reservaBtn" type="button" onclick="abrirPopUp()">Fazer reserva</button>
+        </section>
+
+        <section class="reserva" id="reserva" aria-hidden="true">
+            <div class="reserva-conteudo" role="dialog" aria-modal="true" aria-labelledby="reservaTitulo">
+                <button type="button" class="fechar-reserva" id="fecharReserva" aria-label="Fechar reserva">×</button>
+                <h3 id="reservaTitulo">Reserva para o evento</h3>
+                <form id="formReserva">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+
+                    <label for="quantidade">Quantidade de pessoas</label>
+                    <input type="number" id="quantidade" name="quantidade" placeholder="Número de pessoas" required>
+
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+
+                    <label for="celular">Celular</label>
+                    <input type="tel" id="celular" name="celular" placeholder="(11) 99999-9999" required>
+
+                    <button type="submit" id="enviarReserva">Enviar reserva</button>
+                    <p class="mensagem" id="mensagemReserva"></p>
+                </form>
+            </div>
+        </section>
+
+        <section class="familia">
+            <h3>Ambiente familiar</h3>
+            <p>O Grill Master é um espaço pensado para a família aproveitar um momento tranquilo, com conforto e sabor. O evento de 28 de maio terá um clima acolhedor e pratos especiais para todos.</p>
+        </section>
+
+        <section class="carousel" aria-label="Fotos dos lanches">
+            <h3>Fotos de alguns lanches</h3>
+            <div class="slide-container">
+                <img src="imagens/burguer.jpeg" alt="" class="img">
+                <!-- <img src="imagens/burguer2.jpeg" alt="" class="img"> -->
+                <img src="imagens/lanche.webp" alt="" class="img">
+                <img id="slideImagem" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80" alt="Lanche da hamburgueria" class="img">
+            </div>
+            <p class="slide-legenda" id="slideLegenda">Hambúrguer artesanal para a família.</p>
+        </section>
+
+        <section class="cardapio">
+            <h3>Cardápio</h3>
+            <div class="listas">
+                <div class="lista">
+                    <h4>Lanches</h4>
+                    <ul>
+                        <li>Hambúrguer artesanal clássico</li>
+                        <li>Duplo cheeseburger</li>
+                        <li>Veggie burger</li>
+                    </ul>
+                </div>
+                <div class="lista">
+                    <h4>Bebidas</h4>
+                    <ul>
+                        <li>Refrigerante</li>
+                        <li>Limonada natural</li>
+                        <li>Chá gelado</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <h3>Dúvidas frequentes</h3>
+            <div class="pergunta">
+                <strong>Como faço a reserva?</strong>
+                <p>Preencha o formulário acima e aguarde a mensagem de confirmação no site. Entraremos em contato caso seja necessário.</p>
+            </div>
+            <div class="pergunta">
+                <strong>É necessário pagar antecipado?</strong>
+                <p>Não. A reserva garante o atendimento no dia do evento e o pagamento é feito no local.</p>
+            </div>
+            <div class="pergunta">
+                <strong>Onde fica a hamburgueria?</strong>
+                <p>Rua Quinze de Novembro, 220 - Centro, Suzano.</p>
+            </div>
+        </section>
+
+        <section class="localizacao">
+            <h3>Localização</h3>
+            <p>R. Quinze de Novembro, 220 - Centro, Suzano</p>
+        </section>
+    </main>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>

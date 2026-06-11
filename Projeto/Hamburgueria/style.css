@@ -1,0 +1,224 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    background: #f6f6f6;
+    color: #111;
+    padding: 20px;
+}
+
+.cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 980px;
+    margin: 0 auto 20px;
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+.cabecalho h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.evento {
+    font-size: 14px;
+    color: #444;
+}
+.reserva {
+    display: none;
+}
+.reserva.ativo {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+}
+.carrossel {
+    width: 500px;
+    overflow: hidden;
+    position: relative;
+}
+img{
+    width: 100%;
+    display: none;
+}
+.ativa {
+    display: block;
+}
+.reserva-conteudo {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border: 1px solid #d6d6d6;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.14);
+    position: relative;
+}
+.fechar-reserva {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #f2f2f2;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+.conteudo-principal {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+section {
+    background: #fff;
+    border: 1px solid #d6d6d6;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+h2,
+h3,
+h4 {
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #222;
+}
+
+input,
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #c8c8c8;
+    border-radius: 10px;
+    background: #fafafa;
+    font-size: 14px;
+}
+
+button {
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+button:hover {
+    opacity: 0.95;
+}
+
+.slide-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.slide-imagem {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border: 1px solid #d6d6d6;
+    border-radius: 12px;
+}
+
+.slider-botao {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #c8c8c8;
+    background: #fafafa;
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.slide-legenda {
+    margin-top: 12px;
+    color: #555;
+}
+
+.cardapio .listas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.lista ul {
+    list-style: none;
+    margin-top: 12px;
+}
+
+.lista li {
+    margin-bottom: 10px;
+    padding-left: 12px;
+    position: relative;
+}
+
+.lista li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #333;
+}
+
+.pergunta {
+    margin-top: 12px;
+}
+
+.pergunta strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.localizacao p,
+.familia p,
+.chamada p {
+    color: #444;
+}
+
+.mensagem {
+    margin-top: 12px;
+    min-height: 20px;
+    color: #222;
+}
+
+@media (max-width: 720px) {
+    .cabecalho {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .slide-container {
+        flex-direction: column;
+    }
+
+    .slider-botao {
+        width: 100%;
+    }
+
+    .cardapio .listas {
+        grid-template-columns: 1fr;
+    }
+}
