@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding for Carrots - Com Sprites do Robô</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: #1e1e28;
+      color: #dcdcdc;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+      background-color: #282837;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    #introScreen {
+      width: 690px;
+      height: 460px;
+      text-align: center;
+      gap: 20px;
+      background-color: #22222e;
+      border: 2px solid #46465a;
+      border-radius: 6px;
+      padding: 30px;
+    }
+
+    #introScreen h1 {
+      font-size: 32px;
+      color: #f08c28;
+    }
+
+    #introScreen p {
+      font-size: 16px;
+      color: #aaaaaa;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .instructions-box {
+      background-color: #191923;
+      border: 1px solid #3c3c50;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: left;
+      width: 100%;
+      max-width: 480px;
+      font-size: 14px;
+    }
+
+    .instructions-box ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    header h1 {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .level-badge {
+      font-size: 16px;
+      font-weight: bold;
+      color: #f08c28;
+      background: #191923;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #3c3c50;
+    }
+
+    .main-layout {
+      display: flex;
+      gap: 20px;
+    }
+
+    canvas {
+      background-color: #2d2d3c;
+      border: 2px solid #46465a;
+      border-radius: 4px;
+    }
+
+    .control-panel {
+      width: 300px;
+      background-color: #22222e;
+      border: 2px solid #46465a;
+      border-radius: 4px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 5px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #46465a;
+      border: 1px solid #64647d;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #5a5a73;
+    }
+
+    .btn-start {
+      background-color: #f08c28;
+      border-color: #ff9d3b;
+      font-size: 18px;
+      padding: 12px 30px;
+      flex: none;
+    }
+
+    .btn-start:hover {
+      background-color: #ff9d3b;
+    }
+
+    .btn-run {
+      background-color: #3c783c;
+      border-color: #50a050;
+    }
+
+    .btn-run:hover {
+      background-color: #4b964b;
+    }
+
+    .btn-reset {
+      background-color: #b43c3c;
+      border-color: #dc5050;
+    }
+
+    .btn-reset:hover {
+      background-color: #c84b4b;
+    }
+
+    .btn-next {
+      background-color: #3296fa;
+      border-color: #50b4ff;
+      display: none;
+    }
+
+    .btn-next:hover {
+      background-color: #50b4ff;
+    }
+
+    .command-list-container {
+      flex: 1;
+      background-color: #191923;
+      border: 1px solid #3c3c50;
+      border-radius: 4px;
+      padding: 10px;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+
+    .command-list-container h3 {
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #aaaaaa;
+    }
+
+    .command-item {
+      font-family: monospace;
+      font-size: 13px;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      background-color: #2d2d3c;
+      border-left: 3px solid #3296fa;
+      border-radius: 2px;
+    }
+
+    .status-box {
+      min-height: 24px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #f08c28;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    
+    <!-- TELA 1: INTRODUÇÃO -->
+    <div id="introScreen" class="screen active">
+      <h1>Coding for Carrots</h1>
+      <p>Programe o caminho do robô até a bandeira de chegada nas 5 fases do mapa!</p>
+      
+      <div class="instructions-box">
+        <strong>Como Jogar:</strong>
+        <ul>
+          <li>Monte sua fila de instruções (Mover, Girar Esquerda, Girar Direita).</li>
+          <li>Respeite o trajeto: o robô não pode andar fora do caminho marcado.</li>
+          <li>Chegue na bandeira para desbloquear a próxima fase!</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-start" onclick="screenManager.showGame()">INICIAR FASE 1</button>
+    </div>
+
+    <!-- TELA 2: JOGO PRINCIPAL -->
+    <div id="gameScreen" class="screen">
+      <div class="header-bar">
+        <h1>Coding for Carrots</h1>
+        <div class="level-badge" id="levelIndicator">Fase 1 de 5</div>
+      </div>
+
+      <div class="main-layout" style="margin-top: 10px;">
+        <canvas id="gameCanvas" width="370" height="370"></canvas>
+
+        <div class="control-panel">
+          <div class="button-group">
+            <button class="btn" onclick="game.addCommand('MOVE_FORWARD')">Mover</button>
+            <button class="btn" onclick="game.addCommand('TURN_LEFT')">Esq.</button>
+            <button class="btn" onclick="game.addCommand('TURN_RIGHT')">Dir.</button>
+          </div>
+
+          <div class="command-list-container">
+            <h3>Fila de Execução:</h3>
+            <div id="commandList"></div>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-run" onclick="game.runProgram()">EXECUTAR</button>
+            <button class="btn btn-reset" onclick="game.reset()">RESETAR</button>
+          </div>
+
+          <button id="nextLevelBtn" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE ➔</button>
+        </div>
+      </div>
+
+      <div class="status-box" id="statusMessage">Programe o caminho até a bandeira!</div>
+    </div>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // RECURSOS DE SPRITE DO ROBÔ (Base64)
+    // =========================================================================
+    const robotSprites = {
+      // Direção 0: Direita (r)
+      0: "data:image/gif;base64,R0lGODlhGAGAAIAAAAAAAP///yH5BAEAAAEALAAAAAAYAYAAAAI/jI+py+0Po5y02ouzmlzLDlhgN45kaZ5oqqls275wLMf1jee6bqu5/g8MhjwhcTgcEpvMpvMJjUqn1Kr1is1qt9yu9wsOi8fksvmMTqvX7Lb7DY/L5/S6/Y7P6/f8vv8PGCg4SFhoeIiYqLjI2Oj4CBkpOUlZaXmJmam5ydnp+QkaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v7CxwsPExcbHyMnKy8zNzs/AwdLT1NXW19jZ2tvc3d7f0NHi4+Tl5ufo6err7O3u7+Dx8vP09fb3+Pn6+/z9/v/w8YQICgQIEECxo8iDChwoUMGzp8iDKlypUsGzp8+DKl0pUAG0KEDClypMmTKFOqXMmyps2XM2PKnEmzps2bOHPq3Mmzp0+gQIEAADs=",
+      // Direção 1: Baixo (d - Frente)
+      1: "data:image/gif;base64,R0lGODlhGAGAAIAAAAAAAP///yH5BAEAAAEALAAAAAAYAYAAAAI/jI+py+0Po5y02ouzmlzLDlhgN45kaZ5oqqls275wLMf1jee6bqu5/g8MhjwhcTgcEpvMpvMJjUqn1Kr1is1qt9yu9wsOi8fksvmMTqvX7Lb7DY/L5/S6/Y7P6/f8vv8PGCg4SFhoeIiYqLjI2Oj4CBkpOUlZaXmJmam5ydnp+QkaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v7CxwsPExcbHyMnKy8zNzs/AwdLT1NXW19jZ2tvc3d7f0NHi4+Tl5ufo6err7O3u7+Dx8vP09fb3+Pn6+/z9/v/w8YQICgQIEECxo8iDChwoUMGzp8iDKlypUsGzp8+DKl0pUAG0KEDClypMmTKFOqXMmyps2XM2PKnEmzps2bOHPq3Mmzp0+gQIEAADs=",
+      // Direção 2: Esquerda (l)
+      2: "data:image/gif;base64,R0lGODlhGAGAAIAAAAAAAP///yH5BAEAAAEALAAAAAAYAYAAAAI/jI+py+0Po5y02ouzmlzLDlhgN45kaZ5oqqls275wLMf1jee6bqu5/g8MhjwhcTgcEpvMpvMJjUqn1Kr1is1qt9yu9wsOi8fksvmMTqvX7Lb7DY/L5/S6/Y7P6/f8vv8PGCg4SFhoeIiYqLjI2Oj4CBkpOUlZaXmJmam5ydnp+QkaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v7CxwsPExcbHyMnKy8zNzs/AwdLT1NXW19jZ2tvc3d7f0NHi4+Tl5ufo6err7O3u7+Dx8vP09fb3+Pn6+/z9/v/w8YQICgQIEECxo8iDChwoUMGzp8iDKlypUsGzp8+DKl0pUAG0KEDClypMmTKFOqXMmyps2XM2PKnEmzps2bOHPq3Mmzp0+gQIEAADs=",
+      // Direção 3: Cima (u - Costas)
+      3: "data:image/gif;base64,R0lGODlhGAGAAIAAAAAAAP///yH5BAEAAAEALAAAAAAYAYAAAAI/jI+py+0Po5y02ouzmlzLDlhgN45kaZ5oqqls275wLMf1jee6bqu5/g8MhjwhcTgcEpvMpvMJjUqn1Kr1is1qt9yu9wsOi8fksvmMTqvX7Lb7DY/L5/S6/Y7P6/f8vv8PGCg4SFhoeIiYqLjI2Oj4CBkpOUlZaXmJmam5ydnp+QkaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2+v7CxwsPExcbHyMnKy8zNzs/AwdLT1NXW19jZ2tvc3d7f0NHi4+Tl5ufo6err7O3u7+Dx8vP09fb3+Pn6+/z9/v/w8YQICgQIEECxo8iDChwoUMGzp8iDKlypUsGzp8+DKl0pUAG0KEDClypMmTKFOqXMmyps2XM2PKnEmzps2bOHPq3Mmzp0+gQIEAADs="
+    };
+
+    // Imagens carregadas dinamicamente
+    const robotImages = {};
+    for (let key in robotSprites) {
+      robotImages[key] = new Image();
+      robotImages[key].src = robotSprites[key];
+    }
+
+    // =========================================================================
+    // GERENCIADOR DE TELAS
+    // =========================================================================
+    class ScreenManager {
+      constructor() {
+        this.introScreen = document.getElementById('introScreen');
+        this.gameScreen = document.getElementById('gameScreen');
+      }
+
+      showGame() {
+        this.introScreen.classList.remove('active');
+        this.gameScreen.classList.add('active');
+        game.loadLevel(0);
+      }
+    }
+
+    // =========================================================================
+    // DEFINIÇÃO DAS FASES (PDF)
+    // =========================================================================
+    const LEVELS_DATA = [
+      {
+        name: "Fase 1: Linha Reta",
+        size: 5,
+        start: { x: 2, y: 4, dir: 3 },
+        goal: { x: 2, y: 0 },
+        grid: [
+          [1, 1, 0, 1, 1],
+          [1, 1, 0, 1, 1],
+          [1, 1, 0, 1, 1],
+          [1, 1, 0, 1, 1],
+          [1, 1, 0, 1, 1]
+        ]
+      },
+      {
+        name: "Fase 2: Curva em 'L'",
+        size: 5,
+        start: { x: 0, y: 4, dir: 0 },
+        goal: { x: 3, y: 1 },
+        grid: [
+          [1, 1, 1, 1, 1],
+          [1, 1, 1, 0, 1],
+          [1, 1, 1, 0, 1],
+          [1, 1, 1, 0, 1],
+          [0, 0, 0, 0, 1]
+        ]
+      },
+      {
+        name: "Fase 3: Zig-Zag",
+        size: 5,
+        start: { x: 1, y: 4, dir: 3 },
+        goal: { x: 3, y: 0 },
+        grid: [
+          [1, 1, 1, 0, 1],
+          [1, 1, 1, 0, 1],
+          [1, 1, 0, 0, 1],
+          [1, 0, 1, 1, 1],
+          [1, 0, 1, 1, 1]
+        ]
+      },
+      {
+        name: "Fase 4: Curva em 'U'",
+        size: 5,
+        start: { x: 4, y: 0, dir: 1 },
+        goal: { x: 0, y: 0 },
+        grid: [
+          [0, 1, 1, 1, 0],
+          [0, 1, 1, 1, 0],
+          [0, 1, 1, 1, 0],
+          [0, 1, 1, 1, 0],
+          [0, 0, 0, 0, 0]
+        ]
+      },
+      {
+        name: "Fase 5: Serpente",
+        size: 5,
+        start: { x: 4, y: 4, dir: 2 },
+        goal: { x: 0, y: 0 },
+        grid: [
+          [0, 0, 0, 0, 0],
+          [1, 1, 1, 1, 0],
+          [1, 0, 0, 0, 0],
+          [1, 0, 1, 1, 1],
+          [0, 0, 0, 0, 0]
+        ]
+      }
+    ];
+
+    const CELL_SIZE = 70;
+    const PADDING = 10;
+
+    const COLOR_GRID_BG = '#2d2d3c';
+    const COLOR_GRID_LINE = '#46465a';
+    const COLOR_GOAL = '#f08c28';
+    const COLOR_OBSTACLE = '#1e1e28';
+
+    const DIRECTIONS = [
+      { dx: 1, dy: 0 },  // 0: Direita
+      { dx: 0, dy: 1 },  // 1: Baixo
+      { dx: -1, dy: 0 }, // 2: Esquerda
+      { dx: 0, dy: -1 }  // 3: Cima
+    ];
+
+    const Command = {
+      MOVE_FORWARD: 'FORWARD',
+      TURN_LEFT: 'TURN_LEFT',
+      TURN_RIGHT: 'TURN_RIGHT'
+    };
+
+    // =========================================================================
+    // CLASSE JOGADOR (ROBÔ)
+    // =========================================================================
+    class Player {
+      constructor(x, y, direction) {
+        this.startX = x;
+        this.startY = y;
+        this.startDir = direction;
+        this.reset();
+      }
+
+      reset() {
+        this.x = this.startX;
+        this.y = this.startY;
+        this.direction = this.startDir;
+      }
+
+      moveForward() {
+        const dir = DIRECTIONS[this.direction];
+        this.x += dir.dx;
+        this.y += dir.dy;
+      }
+
+      turnLeft() {
+        this.direction = (this.direction - 1 + 4) % 4;
+      }
+
+      turnRight() {
+        this.direction = (this.direction + 1) % 4;
+      }
+
+      draw(ctx) {
+        const x = PADDING + this.x * CELL_SIZE;
+        const y = PADDING + this.y * CELL_SIZE;
+
+        const img = robotImages[this.direction];
+
+        // Preserva o Pixel Art nítido
+        ctx.imageSmoothingEnabled = false;
+
+        if (img && img.complete) {
+          // Centraliza e ajusta o tamanho do robô dentro da célula
+          const spriteWidth = 44;
+          const spriteHeight = 58;
+          const offsetX = (CELL_SIZE - spriteWidth) / 2;
+          const offsetY = (CELL_SIZE - spriteHeight) / 2;
+
+          ctx.drawImage(img, x + offsetX, y + offsetY, spriteWidth, spriteHeight);
+        }
+      }
+    }
+
+    // =========================================================================
+    // CLASSE DO JOGOS
+    // =========================================================================
+    class Game {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.statusEl = document.getElementById('statusMessage');
+        this.commandListEl = document.getElementById('commandList');
+        this.levelIndicator = document.getElementById('levelIndicator');
+        this.nextBtn = document.getElementById('nextLevelBtn');
+
+        this.currentLevelIndex = 0;
+        this.commands = [];
+        this.isExecuting = false;
+        this.stepDelay = 400;
+      }
+
+      loadLevel(index) {
+        this.currentLevelIndex = index;
+        const data = LEVELS_DATA[index];
+        this.levelData = data;
+
+        this.player = new Player(data.start.x, data.start.y, data.start.dir);
+        this.levelIndicator.textContent = `${data.name} (${index + 1}/5)`;
+        this.nextBtn.style.display = 'none';
+
+        this.reset();
+      }
+
+      nextLevel() {
+        if (this.currentLevelIndex + 1 < LEVELS_DATA.length) {
+          this.loadLevel(this.currentLevelIndex + 1);
+        } else {
+          alert('Parabéns! Você concluiu todas as 5 fases do jogo!');
+          this.loadLevel(0);
+        }
+      }
+
+      addCommand(cmd) {
+        if (this.isExecuting) return;
+        this.commands.push(cmd);
+        this.updateUI();
+      }
+
+      reset() {
+        this.isExecuting = false;
+        this.commands = [];
+        this.player.reset();
+        this.statusEl.textContent = 'Programe o caminho até a bandeira!';
+        this.nextBtn.style.display = 'none';
+        this.updateUI();
+        this.render();
+      }
+
+      async runProgram() {
+        if (this.isExecuting || this.commands.length === 0) return;
+
+        this.isExecuting = true;
+        this.statusEl.textContent = 'Executando comandos...';
+
+        const queue = [...this.commands];
+
+        for (let i = 0; i < queue.length; i++) {
+          if (!this.isExecuting) break;
+
+          const cmd = queue[i];
+          this.executeCommand(cmd);
+          this.render();
+
+          if (this.player.x === this.levelData.goal.x && this.player.y === this.levelData.goal.y) {
+            this.statusEl.textContent = 'SUCESSO! Você alcançou a bandeira!';
+            this.isExecuting = false;
+            this.nextBtn.style.display = 'block';
+            return;
+          }
+
+          if (this.isOutOfBoundsOrObstacle(this.player.x, this.player.y)) {
+            this.statusEl.textContent = 'FALHA! Saiu do caminho!';
+            this.isExecuting = false;
+            return;
+          }
+
+          await new Promise(resolve => setTimeout(resolve, this.stepDelay));
+        }
+
+        if (this.isExecuting) {
+          this.statusEl.textContent = 'Comandos finalizados. Tente novamente!';
+          this.isExecuting = false;
+        }
+      }
+
+      isOutOfBoundsOrObstacle(x, y) {
+        const size = this.levelData.size;
+        if (x < 0 || x >= size || y < 0 || y >= size) return true;
+        return this.levelData.grid[y][x] === 1;
+      }
+
+      executeCommand(cmd) {
+        if (cmd === Command.MOVE_FORWARD) {
+          const dir = DIRECTIONS[this.player.direction];
+          const nx = this.player.x + dir.dx;
+          const ny = this.player.y + dir.dy;
+
+          if (!this.isOutOfBoundsOrObstacle(nx, ny)) {
+            this.player.moveForward();
+          } else {
+            this.statusEl.textContent = 'FALHA! Saiu do caminho!';
+            this.isExecuting = false;
+          }
+        } else if (cmd === Command.TURN_LEFT) {
+          this.player.turnLeft();
+        } else if (cmd === Command.TURN_RIGHT) {
+          this.player.turnRight();
+        }
+      }
+
+      updateUI() {
+        this.commandListEl.innerHTML = '';
+        this.commands.forEach((cmd, index) => {
+          const item = document.createElement('div');
+          item.className = 'command-item';
+          item.textContent = `${index + 1}. ${cmd}`;
+          this.commandListEl.appendChild(item);
+        });
+        this.commandListEl.scrollTop = this.commandListEl.scrollHeight;
+      }
+
+      render() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const size = this.levelData.size;
+
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            const x = PADDING + c * CELL_SIZE;
+            const y = PADDING + r * CELL_SIZE;
+
+            const isBlocked = this.levelData.grid[r][c] === 1;
+            this.ctx.fillStyle = isBlocked ? COLOR_OBSTACLE : COLOR_GRID_BG;
+            this.ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+
+            this.ctx.strokeStyle = COLOR_GRID_LINE;
+            this.ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
+          }
+        }
+
+        const gx = PADDING + this.levelData.goal.x * CELL_SIZE + 15;
+        const gy = PADDING + this.levelData.goal.y * CELL_SIZE + 15;
+        this.ctx.fillStyle = COLOR_GOAL;
+        this.ctx.fillRect(gx, gy, CELL_SIZE - 30, CELL_SIZE - 30);
+
+        this.player.draw(this.ctx);
+      }
+    }
+
+    // Inicialização
+    const game = new Game();
+    const screenManager = new ScreenManager();
+  </script>
+</body>
+</html>
