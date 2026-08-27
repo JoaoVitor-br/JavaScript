@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beta teste</title>
+  <link rel="icon" href="favicon/favicon.ico?v=2" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon/favicon.ico?v=2" type="image/x-icon">
+  <link rel="apple-touch-icon" href="favicon/apple-touch-icon.png?v=2">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="game-container">
+    <div id="introScreen" class="screen active">
+      <img class="intro-scientist" src="sprites/cientista.png" alt="Cientista">
+      <h1>Beta teste</h1>
+      <p>Ajude o robô a alcançar o objetivo programando sua sequência de passos no tabuleiro!</p>
+
+      <div class="instructions-box">
+        <strong>Como jogar:</strong>
+        <ul>
+          <li>Use os botões de ação para montar sua fila de comandos.</li>
+          <li>Evite os obstáculos e não saia da grade.</li>
+          <li>Clique em <strong>EXECUTAR</strong> para rodar seu programa.</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-start" onclick="screenManager.showGame()">JOGAR</button>
+    </div>
+
+    <div id="gameScreen" class="screen">
+      <header>
+        <h1>Coding for Carrots - Core Engine</h1>
+        <div class="level-badge" id="levelIndicator">Fase 1 de 5</div>
+      </header>
+
+      <div id="phaseDialog" class="phase-dialog hidden">
+        <div class="phase-dialog-box">
+          <img class="scientist-portrait" src="sprites/cientista.png" alt="Cientista">
+          <div class="phase-dialog-content">
+            <div class="phase-dialog-name">Cientista</div>
+            <p id="phaseDialogText" class="phase-dialog-text"></p>
+            <button class="btn btn-start phase-dialog-button" onclick="screenManager.closePhaseDialog()">CONTINUAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-layout">
+        <!-- ÁREA DE RENDERIZAÇÃO DO JOGO -->
+        <canvas id="gameCanvas" width="370" height="370"></canvas>
+
+        <!-- PAINEL DE CONTROLE / PROGRAMAÇÃO -->
+        <div class="control-panel">
+          <div class="button-group">
+            <button class="btn" onclick="game.addCommand('MOVE_FORWARD')">Mover</button>
+            <button class="btn" onclick="game.addCommand('TURN_LEFT')">Esq.</button>
+            <button class="btn" onclick="game.addCommand('TURN_RIGHT')">Dir.</button>
+          </div>
+
+          <div class="command-list-container">
+            <h3>Fila de Execução:</h3>
+            <div id="commandList"></div>
+          </div>
+
+          <div class="button-group">
+            <button id="runButton" class="btn btn-run" onclick="game.runProgram()">EXECUTAR</button>
+            <button class="btn btn-reset" onclick="game.reset(true)">RESETAR</button>
+          </div>
+
+          <button id="nextLevelBtn" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE</button>
+        </div>
+      </div>
+
+      <div class="status-box" id="statusMessage">Programe a rota até o objetivo!</div>
+    </div>
+
+    <div id="finishScreen" class="screen">
+      <div id="confettiContainer" class="confetti-container"></div>
+      <h1 id="finishTitle">Fase finalizada!</h1>
+      <p id="finishMessage"></p>
+      <div class="button-group">
+        <button class="btn btn-start" onclick="screenManager.retryLevel()">TENTAR NOVAMENTE</button>
+        <button id="finishNextButton" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE</button>
+        <button class="btn" onclick="screenManager.showIntro()">MENU INICIAL</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js">
+  </script>
+</body>
+
+</html>
