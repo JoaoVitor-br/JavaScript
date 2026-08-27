@@ -1,56 +1,473 @@
- class SoundManager {
-      constructor() {
-        this.confirm = new Audio('som/confirmar.wav');
-        this.steps = [
-          new Audio('som/robopasso1.wav'),
-          new Audio('som/robopasso2.wav'),
-          new Audio('som/robopasso3.wav')
-        ];
-        this.turn = new Audio('som/robovirar.wav');
-        this.reset = new Audio('som/resetar.mp3');
-        this.victory = new Audio('som/vitoria.mp3');
-        this.failure = new Audio('som/falhar.mp3');
-        this.voice = new Audio('som/voz.wav');
-      }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beta teste</title>
 
-      play(audio) {
-        const instance = audio.cloneNode();
-        instance.currentTime = 0;
-        instance.play().catch(() => {});
-      }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
 
-      playConfirm() {
-        this.play(this.confirm);
-      }
+    body {
+      background-color: #1e1e28;
+      color: #dcdcdc;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-      playStep() {
-        this.play(this.steps[Math.floor(Math.random() * this.steps.length)]);
-      }
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+      background-color: #282837;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
 
-      playTurn() {
-        this.play(this.turn);
-      }
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-      playReset() {
-        this.play(this.reset);
-      }
+    .screen.active {
+      display: flex;
+    }
 
-      playVictory() {
-        this.play(this.victory);
-      }
+    #gameScreen {
+      position: relative;
+    }
 
-      playFailure() {
-        this.play(this.failure);
-      }
+    .phase-dialog {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(10, 10, 18, 0.72);
+    }
 
-      playVoice() {
-        const instance = this.voice.cloneNode();
-        instance.playbackRate = 0.94 + Math.random() * 0.12;
-        instance.preservesPitch = false;
-        instance.play().catch(() => {});
+    .phase-dialog.hidden {
+      display: none;
+    }
+
+    .phase-dialog-box {
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      width: min(620px, 100%);
+      padding: 16px;
+      background: #191923;
+      border: 2px solid #f5c542;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+      animation: dialogReveal 400ms ease-out both;
+    }
+
+    .scientist-portrait {
+      width: 110px;
+      height: 140px;
+      flex: 0 0 auto;
+      object-fit: cover;
+      object-position: top center;
+      image-rendering: pixelated;
+      border: 2px solid #64647d;
+      background: #282837;
+    }
+
+    .phase-dialog-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .phase-dialog-name {
+      color: #f5c542;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .phase-dialog-text {
+      color: #ffffff;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .phase-dialog-button {
+      align-self: flex-end;
+      flex: none;
+    }
+
+    @keyframes dialogReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
+    #introScreen {
+      width: 690px;
+      min-height: 440px;
+      text-align: center;
+      gap: 20px;
+      background-color: #22222e;
+      border: 2px solid #46465a;
+      border-radius: 6px;
+      padding: 30px;
+    }
+
+    #introScreen h1 {
+      font-size: 32px;
+      color: #3296fa;
+    }
+
+    #introScreen p {
+      font-size: 16px;
+      color: #aaaaaa;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    #finishScreen {
+      width: 690px;
+      min-height: 440px;
+      text-align: center;
+      gap: 20px;
+      background-color: #22222e;
+      border: 2px solid #46465a;
+      border-radius: 6px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .confetti {
+      position: absolute;
+      top: -12px;
+      width: 9px;
+      height: 14px;
+      will-change: transform;
+      animation: confettiFall 1.5s ease-in forwards;
+    }
+
+    @keyframes confettiFall {
+      25% {
+        transform: translate(24px, 120px) rotate(180deg);
+      }
+      50% {
+        transform: translate(-20px, 250px) rotate(360deg);
+      }
+      75% {
+        transform: translate(18px, 370px) rotate(540deg);
+      }
+      to {
+        transform: translate(-12px, 480px) rotate(720deg);
+      }
+    }
+
+    #finishScreen.active {
+      animation: finishReveal 700ms ease-out both;
+    }
+
+    @keyframes finishReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    #finishScreen h1 {
+      font-size: 32px;
+      color: #3296fa;
+    }
+
+    #finishMessage {
+      font-size: 16px;
+      color: #aaaaaa;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .instructions-box {
+      background-color: #191923;
+      border: 1px solid #3c3c50;
+      border-radius: 6px;
+      padding: 15px;
+      text-align: left;
+      width: 100%;
+      max-width: 480px;
+      font-size: 14px;
+    }
+
+    .instructions-box ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .instructions-box li {
+      margin-bottom: 5px;
+    }
+
+    .level-badge {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background-color: #3296fa;
+      color: #191923;
+      border-radius: 3px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    header h1 {
+      font-size: 22px;
+      color: #ffffff;
+      margin-bottom: 5px;
+    }
+
+    .main-layout {
+      display: flex;
+      gap: 20px;
+    }
+
+    canvas {
+      background-color: #2d2d3c;
+      border: 2px solid #46465a;
+      border-radius: 4px;
+    }
+
+    .control-panel {
+      width: 300px;
+      background-color: #22222e;
+      border: 2px solid #46465a;
+      border-radius: 4px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 5px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #46465a;
+      border: 1px solid #64647d;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #5a5a73;
+    }
+
+    .btn-start {
+      background-color: #3296fa;
+      border-color: #64b4ff;
+      font-size: 18px;
+      padding: 12px 30px;
+      flex: none;
+    }
+
+    .btn-start:hover {
+      background-color: #64b4ff;
+    }
+
+    .btn-next {
+      display: none;
+      background-color: #3296fa;
+      border-color: #64b4ff;
+    }
+
+    .btn-next:hover {
+      background-color: #4aa7ff;
+    }
+
+    #finishNextButton {
+      background-color: #f5c542;
+      border-color: #ffe27a;
+      color: #191923;
+      font-size: 18px;
+      box-shadow: 0 0 16px rgba(245, 197, 66, 0.55);
+    }
+
+    #finishNextButton:hover {
+      background-color: #ffda57;
+      box-shadow: 0 0 22px rgba(245, 197, 66, 0.8);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-run {
+      background-color: #3c783c;
+      border-color: #50a050;
+    }
+
+    .btn-run:hover {
+      background-color: #4b964b;
+    }
+
+    .btn-reset {
+      background-color: #b43c3c;
+      border-color: #dc5050;
+    }
+
+    .btn-reset:hover {
+      background-color: #c84b4b;
+    }
+
+    .command-list-container {
+      flex: 1;
+      background-color: #191923;
+      border: 1px solid #3c3c50;
+      border-radius: 4px;
+      padding: 10px;
+      overflow-y: auto;
+      max-height: 220px;
+    }
+
+    .command-list-container h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #aaaaaa;
+    }
+
+    .command-item {
+      font-family: monospace;
+      font-size: 14px;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      background-color: #2d2d3c;
+      border-left: 3px solid #3296fa;
+      border-radius: 2px;
+    }
+
+    .status-box {
+      min-height: 24px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #3296fa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    <div id="introScreen" class="screen active">
+      <h1>Beta teste</h1>
+      <p>Ajude o robô a alcançar o objetivo programando sua sequência de passos no tabuleiro!</p>
+
+      <div class="instructions-box">
+        <strong>Como jogar:</strong>
+        <ul>
+          <li>Use os botões de ação para montar sua fila de comandos.</li>
+          <li>Evite os obstáculos e não saia da grade.</li>
+          <li>Clique em <strong>EXECUTAR</strong> para rodar seu programa.</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-start" onclick="screenManager.showGame()">JOGAR</button>
+    </div>
+
+    <div id="gameScreen" class="screen">
+      <header>
+        <h1>Coding for Carrots - Core Engine</h1>
+        <div class="level-badge" id="levelIndicator">Fase 1 de 5</div>
+      </header>
+
+      <div id="phaseDialog" class="phase-dialog hidden">
+        <div class="phase-dialog-box">
+          <img class="scientist-portrait" src="sprites/cientista.webp" alt="Cientista">
+          <div class="phase-dialog-content">
+            <div class="phase-dialog-name">Cientista</div>
+            <p id="phaseDialogText" class="phase-dialog-text"></p>
+            <button class="btn btn-start phase-dialog-button" onclick="screenManager.closePhaseDialog()">CONTINUAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-layout">
+        <!-- ÁREA DE RENDERIZAÇÃO DO JOGO -->
+        <canvas id="gameCanvas" width="370" height="370"></canvas>
+
+        <!-- PAINEL DE CONTROLE / PROGRAMAÇÃO -->
+        <div class="control-panel">
+          <div class="button-group">
+            <button class="btn" onclick="game.addCommand('MOVE_FORWARD')">Mover</button>
+            <button class="btn" onclick="game.addCommand('TURN_LEFT')">Esq.</button>
+            <button class="btn" onclick="game.addCommand('TURN_RIGHT')">Dir.</button>
+          </div>
+
+          <div class="command-list-container">
+            <h3>Fila de Execução:</h3>
+            <div id="commandList"></div>
+          </div>
+
+          <div class="button-group">
+            <button id="runButton" class="btn btn-run" onclick="game.runProgram()">EXECUTAR</button>
+            <button class="btn btn-reset" onclick="game.reset(true)">RESETAR</button>
+          </div>
+
+          <button id="nextLevelBtn" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE</button>
+        </div>
+      </div>
+
+      <div class="status-box" id="statusMessage">Programe a rota até o objetivo!</div>
+    </div>
+
+    <div id="finishScreen" class="screen">
+      <div id="confettiContainer" class="confetti-container"></div>
+      <h1 id="finishTitle">Fase finalizada!</h1>
+      <p id="finishMessage"></p>
+      <div class="button-group">
+      <button id="retryLevelButton" class="btn btn-start" onclick="screenManager.retryLevel()">TENTAR NOVAMENTE</button>
+        <button id="finishNextButton" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE</button>
+        <button class="btn" onclick="screenManager.showIntro()">MENU INICIAL</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
     class ScreenManager {
       constructor() {
         this.introScreen = document.getElementById('introScreen');
@@ -59,6 +476,7 @@
         this.finishTitle = document.getElementById('finishTitle');
         this.finishMessage = document.getElementById('finishMessage');
         this.finishNextButton = document.getElementById('finishNextButton');
+        this.retryLevelButton = document.getElementById('retryLevelButton');
         this.confettiContainer = document.getElementById('confettiContainer');
         this.phaseDialog = document.getElementById('phaseDialog');
         this.phaseDialogText = document.getElementById('phaseDialogText');
@@ -76,12 +494,11 @@
       showPhaseDialog() {
         const messages = [
           'O caminho parece simples. Programe os passos e leve o robô até o objetivo!',
-          'Atenção! Agora precisamos fazer uma curva para encontrar o objetivo.',
-          'Este caminho muda de direção. Planeje cada comando com cuidado.',
+          'Atenção, cientista! Agora precisamos fazer uma curva para encontrar o objetivo.',
+          'Este caminho tem várias mudanças de direção. Planeje cada comando com cuidado.',
           'O trajeto faz uma volta. Use os giros no momento certo para não bater nas paredes.',
-          'O último desafio é uma serpente. Encontre o caminho completo.'
+          'O último desafio é uma serpente. Mantenha a calma e encontre o caminho completo.'
         ];
-
         clearTimeout(this.dialogTypingTimer);
         this.phaseDialogText.textContent = '';
         this.phaseDialog.classList.remove('hidden');
@@ -93,10 +510,17 @@
 
         const character = text[index];
         this.phaseDialogText.textContent += character;
-        if (/[A-Za-zÀ-ÿ]/.test(character)) soundManager.playVoice();
+
+        if (/[A-Za-zÀ-ÿ]/.test(character)) {
+          const letterVoice = voiceSound.cloneNode();
+          letterVoice.playbackRate = 0.94 + Math.random() * 0.12;
+          letterVoice.preservesPitch = false;
+          letterVoice.play().catch(() => {});
+        }
+
         this.dialogTypingTimer = setTimeout(() => {
           this.typeDialogText(text, index + 1);
-        }, 35);
+        }, 65);
       }
 
       closePhaseDialog() {
@@ -110,17 +534,19 @@
         this.confettiContainer.innerHTML = '';
         this.finishTitle.textContent = title;
         this.finishMessage.textContent = message;
+        this.retryLevelButton.style.display = canAdvance ? 'none' : 'block';
         this.finishNextButton.style.display = canAdvance ? 'block' : 'none';
         this.finishScreen.classList.add('active');
 
         if (canAdvance) {
-          for (let i = 0; i < 50; i++) {
+          for (let i = 0; i < 70; i++) {
             const confetti = document.createElement('span');
             confetti.className = 'confetti';
             confetti.style.left = `${Math.random() * 100}%`;
             confetti.style.animationDelay = `${Math.random() * 0.8}s`;
             confetti.style.animationDuration = `${1.1 + Math.random() * 0.7}s`;
-            confetti.style.backgroundColor = ['#3296fa', '#64b4ff', '#e85d75', '#50c878'][i % 4];
+            confetti.style.backgroundColor = ['#3296fa', '#f5c542', '#e85d75', '#50c878'][i % 4];
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
             this.confettiContainer.appendChild(confetti);
           }
         }
@@ -149,7 +575,7 @@
     const COLOR_GRID_BG = '#2d2d3c';
     const COLOR_GRID_LINE = '#46465a';
     const COLOR_PLAYER = '#3296fa';
-    const COLOR_GOAL = '#3296fa';     // Cenoura
+    const COLOR_GOAL = '#3296fa';     // Objetivo
     const COLOR_OBSTACLE = '#c83c3c';
 
     // Orientação: 0 = Direita, 1 = Baixo, 2 = Esquerda, 3 = Cima
@@ -183,6 +609,18 @@
     wallImage.onload = () => {
       if (typeof game !== 'undefined') game.render();
     };
+
+    const confirmSound = new Audio('som/confirmar.wav');
+    const robotStepSounds = [
+      new Audio('som/robopasso1.wav'),
+      new Audio('som/robopasso2.wav'),
+      new Audio('som/robopasso3.wav')
+    ];
+    const robotTurnSound = new Audio('som/robovirar.wav');
+    const resetSound = new Audio('som/resetar.mp3');
+    const victorySound = new Audio('som/vitoria.mp3');
+    const failureSound = new Audio('som/falhar.mp3');
+    const voiceSound = new Audio('som/voz.wav');
 
     const LEVELS_DATA = [
       {
@@ -407,6 +845,7 @@
 
       restartPhase() {
         this.isExecuting = false;
+        this.phaseDialogPending = true;
         this.level.player.reset();
         this.statusEl.textContent = 'Programe a rota até o objetivo!';
         this.runButton.disabled = false;
@@ -420,7 +859,11 @@
       }
 
       reset(playSound = false) {
-        if (playSound) soundManager.playReset();
+        if (playSound) {
+          resetSound.currentTime = 0;
+          resetSound.play().catch(() => {});
+        }
+
         this.isExecuting = false;
         this.commands = [];
         this.level.player.reset();
@@ -431,9 +874,11 @@
       }
 
       async runProgram() {
+        confirmSound.currentTime = 0;
+        confirmSound.play().catch(() => {});
+
         if (this.isExecuting || this.commands.length === 0) return;
 
-        soundManager.playConfirm();
         this.isExecuting = true;
         this.runButton.disabled = true;
         this.statusEl.textContent = 'Executando comandos...';
@@ -452,14 +897,16 @@
 
             // Validações pós-movimento
             if (this.level.isGoal(player.x, player.y)) {
-              soundManager.playVictory();
+              victorySound.currentTime = 0;
+              victorySound.play().catch(() => {});
               this.statusEl.textContent = 'SUCESSO! Você alcançou o objetivo!';
-              screenManager.showFinish('Parabéns!', 'Você alcançou a cenoura e concluiu a fase!', true);
+              screenManager.showFinish('Parabéns!', 'Você alcançou o objetivo e concluiu a fase!', true);
               return;
             }
 
             if (this.level.isObstacle(player.x, player.y)) {
-              soundManager.playFailure();
+              failureSound.currentTime = 0;
+              failureSound.play().catch(() => {});
               this.statusEl.textContent = 'FALHA! Você colidiu!';
               screenManager.showFinish('Fase não concluída', 'O robô colidiu com um obstáculo ou saiu da grade.');
               return;
@@ -470,9 +917,10 @@
           }
 
           if (this.isExecuting) {
-            soundManager.playFailure();
+            failureSound.currentTime = 0;
+            failureSound.play().catch(() => {});
             this.statusEl.textContent = 'Comandos finalizados. Tente novamente!';
-            screenManager.showFinish('Fase não concluída', 'A fila terminou antes de o robô alcançar a cenoura.');
+            screenManager.showFinish('Fase não concluída', 'A fila terminou antes de o robô alcançar o objetivo.');
           }
         } finally {
           this.isExecuting = false;
@@ -489,17 +937,21 @@
 
           if (nx >= 0 && nx < this.level.size && ny >= 0 && ny < this.level.size) {
             player.moveForward();
-            soundManager.playStep();
+            const stepSound = robotStepSounds[Math.floor(Math.random() * robotStepSounds.length)];
+            stepSound.currentTime = 0;
+            stepSound.play().catch(() => {});
           } else {
             this.statusEl.textContent = 'FALHA! Saiu dos limites!';
             this.isExecuting = false;
           }
         } else if (cmd === Command.TURN_LEFT) {
           player.turnLeft();
-          soundManager.playTurn();
+          robotTurnSound.currentTime = 0;
+          robotTurnSound.play().catch(() => {});
         } else if (cmd === Command.TURN_RIGHT) {
           player.turnRight();
-          soundManager.playTurn();
+          robotTurnSound.currentTime = 0;
+          robotTurnSound.play().catch(() => {});
         }
       }
 
@@ -529,6 +981,8 @@
     }
 
     // Inicialização do Jogo
-    const soundManager = new SoundManager();
     const game = new Game();
     const screenManager = new ScreenManager();
+  </script>
+</body>
+</html>
