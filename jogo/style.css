@@ -200,6 +200,27 @@
       line-height: 1.5;
     }
 
+    .finish-thanks {
+      display: none;
+      max-width: 560px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #d8d8d8;
+      text-align: center;
+      margin-top: -6px;
+    }
+
+    .finish-credits {
+      display: none;
+      max-width: 700px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #f5c542;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
     #finishScreen.active {
       animation: finishReveal 700ms ease-out both;
     }
@@ -340,6 +361,26 @@
 
     .btn-reset:hover {
       background-color: #c84b4b;
+    }
+
+    .btn-reset-hold {
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    }
+
+    .btn-reset-hold.holding {
+      transform: scale(0.98);
+      box-shadow: 0 0 0 3px rgba(220, 80, 80, 0.35);
+      filter: brightness(1.15);
+    }
+
+    .btn-retry {
+      background-color: #3a7bd5;
+      border-color: #5ca5ff;
+      color: #ffffff;
+    }
+
+    .btn-retry:hover {
+      background-color: #4d8fe6;
     }
 
     .command-list-container {

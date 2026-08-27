@@ -34,13 +34,13 @@
 
     <div id="gameScreen" class="screen">
       <header>
-        <h1>Coding for Carrots - Core Engine</h1>
+        <h1>Beta teste - Core Engine</h1>
         <div class="level-badge" id="levelIndicator">Fase 1 de 5</div>
       </header>
 
       <div id="phaseDialog" class="phase-dialog hidden">
         <div class="phase-dialog-box">
-          <img class="scientist-portrait" src="sprites/cientista.png" alt="Cientista">
+          <img class="scientist-portrait" src="sprites2/cientista.webp" alt="Cientista">
           <div class="phase-dialog-content">
             <div class="phase-dialog-name">Cientista</div>
             <p id="phaseDialogText" class="phase-dialog-text"></p>
@@ -56,9 +56,9 @@
         <!-- PAINEL DE CONTROLE / PROGRAMAÇÃO -->
         <div class="control-panel">
           <div class="button-group">
-            <button class="btn" onclick="game.addCommand('MOVE_FORWARD')">Mover</button>
-            <button class="btn" onclick="game.addCommand('TURN_LEFT')">Esq.</button>
-            <button class="btn" onclick="game.addCommand('TURN_RIGHT')">Dir.</button>
+            <button class="btn" onclick="game.addCommand('Ande_frente')">Mover</button>
+            <button class="btn" onclick="game.addCommand('Vire_esquerda')">Esq.</button>
+            <button class="btn" onclick="game.addCommand('Vire_direita')">Dir.</button>
           </div>
 
           <div class="command-list-container">
@@ -82,16 +82,18 @@
       <div id="confettiContainer" class="confetti-container"></div>
       <h1 id="finishTitle">Fase finalizada!</h1>
       <p id="finishMessage"></p>
+      <p id="finishThanks" class="finish-thanks">Esse jogo foi baseado nas práticas do curso de desenvolvimento de sistemas. Se você gostou, considere se juntar ao curso!</p>
+      <p id="finishCredits" class="finish-credits">Feito por: Emily Gonçalves, Isabela Matos, João Vitor Amorim e Vinicius Magalhães TDS2</p>
       <div class="button-group">
-        <button class="btn btn-start" onclick="screenManager.retryLevel()">TENTAR NOVAMENTE</button>
+        <button class="btn btn-retry" onclick="screenManager.retryLevel()">TENTAR NOVAMENTE</button>
+        <button id="finalResetGameButton" class="btn btn-reset btn-reset-hold" type="button">RESETAR O JOGO (Segure)</button>
         <button id="finishNextButton" class="btn btn-next" onclick="game.nextLevel()">PRÓXIMA FASE</button>
         <button class="btn" onclick="screenManager.showIntro()">MENU INICIAL</button>
       </div>
     </div>
   </div>
 
-  <script src="script.js">
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>

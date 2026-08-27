@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coding for Carrots - Com Sprites do Robô</title>
+  <title>Objetivo - Com Sprites do Robô</title>
   <style>
     * {
       box-sizing: border-box;
@@ -229,7 +229,7 @@
     
     <!-- TELA 1: INTRODUÇÃO -->
     <div id="introScreen" class="screen active">
-      <h1>Coding for Carrots</h1>
+      <h1>Objetivo</h1>
       <p>Programe o caminho do robô até a bandeira de chegada nas 5 fases do mapa!</p>
       
       <div class="instructions-box">
@@ -247,7 +247,7 @@
     <!-- TELA 2: JOGO PRINCIPAL -->
     <div id="gameScreen" class="screen">
       <div class="header-bar">
-        <h1>Coding for Carrots</h1>
+        <h1>Objetivo</h1>
         <div class="level-badge" id="levelIndicator">Fase 1 de 5</div>
       </div>
 

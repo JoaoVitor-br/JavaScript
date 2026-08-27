@@ -58,11 +58,48 @@
         this.finishScreen = document.getElementById('finishScreen');
         this.finishTitle = document.getElementById('finishTitle');
         this.finishMessage = document.getElementById('finishMessage');
+        this.finishThanks = document.getElementById('finishThanks');
+        this.finishCredits = document.getElementById('finishCredits');
         this.finishNextButton = document.getElementById('finishNextButton');
+        this.finalResetGameButton = document.getElementById('finalResetGameButton');
         this.confettiContainer = document.getElementById('confettiContainer');
         this.phaseDialog = document.getElementById('phaseDialog');
         this.phaseDialogText = document.getElementById('phaseDialogText');
         this.dialogTypingTimer = null;
+        this.resetHoldTimer = null;
+        this.resetHoldDuration = 1200;
+        this.bindFinalResetButton();
+      }
+
+      bindFinalResetButton() {
+        if (!this.finalResetGameButton) return;
+
+        const startReset = () => {
+          this.clearResetHold();
+          this.resetHoldTimer = setTimeout(() => {
+            this.finalResetGameButton.classList.remove('holding');
+            game.restartGame();
+            this.showGame();
+          }, this.resetHoldDuration);
+          this.finalResetGameButton.classList.add('holding');
+        };
+
+        const cancelReset = () => {
+          this.clearResetHold();
+          this.finalResetGameButton.classList.remove('holding');
+        };
+
+        this.finalResetGameButton.addEventListener('pointerdown', startReset);
+        this.finalResetGameButton.addEventListener('pointerup', cancelReset);
+        this.finalResetGameButton.addEventListener('pointerleave', cancelReset);
+        this.finalResetGameButton.addEventListener('pointercancel', cancelReset);
+      }
+
+      clearResetHold() {
+        if (this.resetHoldTimer) {
+          clearTimeout(this.resetHoldTimer);
+          this.resetHoldTimer = null;
+        }
       }
 
       showGame() {
@@ -105,12 +142,14 @@
         game.phaseDialogPending = false;
       }
 
-      showFinish(title, message, canAdvance = false) {
+      showFinish(title, message, canAdvance = false, showFinalCredits = false) {
         this.gameScreen.classList.remove('active');
         this.confettiContainer.innerHTML = '';
         this.finishTitle.textContent = title;
         this.finishMessage.textContent = message;
         this.finishNextButton.style.display = canAdvance ? 'block' : 'none';
+        this.finishThanks.style.display = showFinalCredits ? 'block' : 'none';
+        this.finishCredits.style.display = showFinalCredits ? 'block' : 'none';
         this.finishScreen.classList.add('active');
 
         if (canAdvance) {
@@ -128,6 +167,11 @@
 
       retryLevel() {
         game.restartPhase();
+        this.showGame();
+      }
+
+      resetGame() {
+        game.restartGame();
         this.showGame();
       }
 
@@ -149,7 +193,7 @@
     const COLOR_GRID_BG = '#2d2d3c';
     const COLOR_GRID_LINE = '#46465a';
     const COLOR_PLAYER = '#3296fa';
-    const COLOR_GOAL = '#3296fa';     // Cenoura
+    const COLOR_GOAL = '#3296fa';     // ob
     const COLOR_OBSTACLE = '#c83c3c';
 
     // Orientação: 0 = Direita, 1 = Baixo, 2 = Esquerda, 3 = Cima
@@ -161,9 +205,9 @@
     ];
 
     const Command = {
-      MOVE_FORWARD: 'MOVE_FORWARD',
-      TURN_LEFT: 'TURN_LEFT',
-      TURN_RIGHT: 'TURN_RIGHT'
+      MOVE_FORWARD: 'Ande_frente',
+      TURN_LEFT: 'Vire_esquerda',
+      TURN_RIGHT: 'Vire_direita'
     };
 
     const robotImages = [
@@ -242,7 +286,7 @@
           [1, 1, 1, 1, 0], 
           [1, 0, 0, 0, 0],
           [1, 0, 1, 1, 1], 
-          [0, 0, 0, 0, 0]
+          [1, 0, 0, 0, 0]
         ]
       }
     ];
@@ -397,7 +441,7 @@
           this.loadLevel(this.currentLevelIndex + 1);
           screenManager.showGame();
         } else {
-          screenManager.showFinish('Parabéns!', 'Você concluiu todas as fases do jogo!');
+          screenManager.showFinish('Parabéns!', 'Você concluiu todas as fases do jogo!', false, true);
         }
       }
 
@@ -405,6 +449,16 @@
         return this.level.isObstacle(x, y);
       }
 
+      // Reinício completo do jogo: usado apenas pelo botão da tela final.
+      restartGame() {
+        this.currentLevelIndex = 0;
+        this.isExecuting = false;
+        this.commands = [];
+        this.phaseDialogPending = true;
+        this.loadLevel(0);
+      }
+
+      // Reset apenas da fase atual: usado pelo botão RESETAR do painel.
       restartPhase() {
         this.isExecuting = false;
         this.level.player.reset();
@@ -454,14 +508,14 @@
             if (this.level.isGoal(player.x, player.y)) {
               soundManager.playVictory();
               this.statusEl.textContent = 'SUCESSO! Você alcançou o objetivo!';
-              screenManager.showFinish('Parabéns!', 'Você alcançou a cenoura e concluiu a fase!', true);
+              screenManager.showFinish('Parabéns!', 'Você alcançou o objetivo e concluiu a fase!', true, false);
               return;
             }
 
             if (this.level.isObstacle(player.x, player.y)) {
               soundManager.playFailure();
               this.statusEl.textContent = 'FALHA! Você colidiu!';
-              screenManager.showFinish('Fase não concluída', 'O robô colidiu com um obstáculo ou saiu da grade.');
+              screenManager.showFinish('Fase não concluída', 'O robô colidiu com um obstáculo ou saiu da grade.', false, false);
               return;
             }
 
@@ -472,7 +526,7 @@
           if (this.isExecuting) {
             soundManager.playFailure();
             this.statusEl.textContent = 'Comandos finalizados. Tente novamente!';
-            screenManager.showFinish('Fase não concluída', 'A fila terminou antes de o robô alcançar a cenoura.');
+            screenManager.showFinish('Fase não concluída', 'A fila terminou antes de o robô alcançar o objetivo.');
           }
         } finally {
           this.isExecuting = false;
@@ -506,15 +560,15 @@
       updateUI() {
         this.commandListEl.innerHTML = '';
         const labels = {
-          'FORWARD': '1. MOVER FRENTE',
-          'TURN_LEFT': '2. GIRAR ESQUERDA',
-          'TURN_RIGHT': '3. GIRAR DIREITA'
+          'Ande_frente': 'ANDAR PARA FRENTE',
+          'Vire_esquerda': 'VIRAR PARA ESQUERDA',
+          'Vire_direita': 'VIRAR PARA DIREITA'
         };
 
         this.commands.forEach((cmd, index) => {
           const item = document.createElement('div');
           item.className = 'command-item';
-          item.textContent = `${index + 1}. ${cmd}`;
+          item.textContent = `${index + 1}. ${labels[cmd] || cmd}`;
           this.commandListEl.appendChild(item);
         });
 
