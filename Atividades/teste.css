@@ -1,0 +1,54 @@
+.about-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.about-content {
+  flex: 1;
+}
+
+.about-title {
+  color: #72C7F6; /* Azul claro do layout */
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.about-text {
+  color: #1A202C;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-image-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+/* Moldura/Card decorativo atrás da imagem */
+.about-image-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 100%;
+  height: 100%;
+  background-color: #D6EFFF;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.about-image {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(15, 44, 89, 0.1);
+}

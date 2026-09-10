@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipe do Projeto ZELO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --azul-escuro: #0F2C59;
+      --azul-medio: #1E56A0;
+      --azul-claro: #E6F0FA;
+      --azul-suave: #F4F8FC;
+      --verde-app: #28A745;
+      --verde-app-hover: #218838;
+      --texto-escuro: #1A202C;
+      --texto-mutado: #4A5568;
+      --branco: #FFFFFF;
+      --sombra-card: 0 10px 30px rgba(15, 44, 89, 0.08);
+      --sombra-hover: 0 15px 35px rgba(15, 44, 89, 0.15);
+      --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--texto-escuro);
+      background-color: var(--branco);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* --- NAVEGAÇÃO --- */
+    .header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(15, 44, 89, 0.08);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--azul-escuro);
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      color: var(--texto-mutado);
+      transition: var(--transicao);
+    }
+
+    .nav-link:hover {
+      color: var(--azul-medio);
+    }
+
+    /* --- BOTÕES --- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: var(--transicao);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-green {
+      background-color: var(--verde-app);
+      color: var(--branco);
+      box-shadow: 0 4px 14px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-green:hover {
+      background-color: var(--verde-app-hover);
+      transform: translateY(-2px);
+    }
+
+    /* --- HERO SECTION --- */
+    .hero {
+      background: linear-gradient(135deg, var(--azul-claro) 0%, var(--azul-suave) 100%);
+      padding: 90px 0 70px 0;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--azul-escuro);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--texto-mutado);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* --- INTEGRANTES DA EQUIPE --- */
+    .team-section {
+      padding: 90px 0;
+      background-color: var(--branco);
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      color: var(--azul-escuro);
+      margin-bottom: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--texto-mutado);
+      margin-bottom: 56px;
+      font-size: 1.05rem;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      justify-content: center;
+    }
+
+    .member-card {
+      background: var(--branco);
+      border-radius: 20px;
+      padding: 32px 20px;
+      box-shadow: var(--sombra-card);
+      transition: var(--transicao);
+      text-align: center;
+      border: 1px solid rgba(15, 44, 89, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .member-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--sombra-hover);
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul-suave));
+      border: 3px solid var(--azul-medio);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: var(--azul-medio);
+      font-weight: 700;
+    }
+
+    .member-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--azul-escuro);
+      margin-bottom: 6px;
+    }
+
+    .member-role {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--azul-medio);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .member-bio {
+      font-size: 0.9rem;
+      color: var(--texto-mutado);
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: auto;
+    }
+
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--azul-claro);
+      color: var(--azul-medio);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transicao);
+    }
+
+    .social-icon:hover {
+      background-color: var(--azul-medio);
+      color: var(--branco);
+    }
+
+    /* --- FOOTER --- */
+    .footer {
+      background-color: var(--azul-escuro);
+      color: var(--branco);
+      padding: 40px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2rem; }
+      .nav-menu { display: none; }
+      .team-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navegação -->
+  <header class="header">
+    <div class="container nav-container">
+      <div class="logo">ZELO</div>
+      <ul class="nav-menu">
+        <li><a href="#inicio" class="nav-link">Início</a></li>
+        <li><a href="#equipe" class="nav-link">Equipe</a></li>
+        <li><a href="#projeto" class="nav-link">O Projeto</a></li>
+        <li><a href="#contatos" class="nav-link">Contatos</a></li>
+      </ul>
+      <a href="#contatos" class="btn btn-green">Baixe o app</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="inicio" class="hero">
+    <div class="container">
+      <h1 class="hero-title">Equipe do Projeto ZELO</h1>
+      <p class="hero-subtitle">[Subtítulo / Descrição resumida do projeto ou grupo desenvolvedor]</p>
+    </div>
+  </section>
+
+  <!-- Seção da Equipe (5 Membros) -->
+  <section id="equipe" class="team-section">
+    <div class="container">
+      <h2 class="section-title">Conheça o Grupo</h2>
+      <p class="section-subtitle">[Subtítulo explicativo sobre os responsáveis pelo desenvolvimento]</p>
+      
+      <div class="team-grid">
+        
+        <!-- Membro 1 -->
+        <div class="member-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-placeholder">M1</div>
+          </div>
+          <h3 class="member-name">[Nome do Membro 1]</h3>
+          <span class="member-role">[Cargo / Função]</span>
+          <p class="member-bio">[Texto de apresentação / Descrição das responsabilidades no projeto]</p>
+          <div class="social-links">
+            <a href="#" class="social-icon" title="LinkedIn">in</a>
+            <a href="#" class="social-icon" title="GitHub">gh</a>
+            <a href="#" class="social-icon" title="E-mail">@</a>
+          </div>
+        </div>
+
+        <!-- Membro 2 -->
+        <div class="member-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-placeholder">M2</div>
+          </div>
+          <h3 class="member-name">[Nome do Membro 2]</h3>
+          <span class="member-role">[Cargo / Função]</span>
+          <p class="member-bio">[Texto de apresentação / Descrição das responsabilidades no projeto]</p>
+          <div class="social-links">
+            <a href="#" class="social-icon" title="LinkedIn">in</a>
+            <a href="#" class="social-icon" title="GitHub">gh</a>
+            <a href="#" class="social-icon" title="E-mail">@</a>
+          </div>
+        </div>
+
+        <!-- Membro 3 -->
+        <div class="member-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-placeholder">M3</div>
+          </div>
+          <h3 class="member-name">[Nome do Membro 3]</h3>
+          <span class="member-role">[Cargo / Função]</span>
+          <p class="member-bio">[Texto de apresentação / Descrição das responsabilidades no projeto]</p>
+          <div class="social-links">
+            <a href="#" class="social-icon" title="LinkedIn">in</a>
+            <a href="#" class="social-icon" title="GitHub">gh</a>
+            <a href="#" class="social-icon" title="E-mail">@</a>
+          </div>
+        </div>
+
+        <!-- Membro 4 -->
+        <div class="member-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-placeholder">M4</div>
+          </div>
+          <h3 class="member-name">[Nome do Membro 4]</h3>
+          <span class="member-role">[Cargo / Função]</span>
+          <p class="member-bio">[Texto de apresentação / Descrição das responsabilidades no projeto]</p>
+          <div class="social-links">
+            <a href="#" class="social-icon" title="LinkedIn">in</a>
+            <a href="#" class="social-icon" title="GitHub">gh</a>
+            <a href="#" class="social-icon" title="E-mail">@</a>
+          </div>
+        </div>
+
+        <!-- Membro 5 -->
+        <div class="member-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-placeholder">M5</div>
+          </div>
+          <h3 class="member-name">[Nome do Membro 5]</h3>
+          <span class="member-role">[Cargo / Função]</span>
+          <p class="member-bio">[Texto de apresentação / Descrição das responsabilidades no projeto]</p>
+          <div class="social-links">
+            <a href="#" class="social-icon" title="LinkedIn">in</a>
+            <a href="#" class="social-icon" title="GitHub">gh</a>
+            <a href="#" class="social-icon" title="E-mail">@</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contatos" class="footer">
+    <div class="container">
+      <p>&copy; 2026 - Projeto ZELO. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
