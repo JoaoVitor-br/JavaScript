@@ -35,7 +35,7 @@ bandeira.fillStyle = "white"
 bandeira.fill()
 
 bandeira.beginPath()
-bandeira.arc(100,100,10,0,Math.PI*2)
+bandeira.arc(60,50,20,0,Math.PI*2)
 bandeira.fillStyle = "red"
 bandeira.fill()
 
