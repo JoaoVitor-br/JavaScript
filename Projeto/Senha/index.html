@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Gerador de Senhas</h1>
+
+    <label for="">Tamanho: <input type="number" id="tamanho" value="8" min="4" max="8"></label>
+
+    <div>
+        <label for=""><input type="checkbox" id="maiusculas" checked> Maíusculas (A-Z)</label>
+        <label for=""><input type="checkbox" id="minusculas" checked> Minusculas (a-z)</label>
+        <label for=""><input type="checkbox" id="numeros" checked> Números (0-9)</label>
+        <label for=""><input type="checkbox" id="simbolos" checked> Símbolos</label>
+    </div>
+
+    <button id="gerar">Gerar senha</button>
+
+    <p id="resultado"></p>
+
+    <button id="copiar">Copiar senha</button>
+
+    <script src="srcipt.js"></script>
+</body>
+</html>
