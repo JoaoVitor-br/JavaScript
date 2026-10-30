@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo SENAI - Jogo Pegue!</title>
+
+    <!-- Importação da fonte Montserrat conforme Design System -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Estilos Separados -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- CABEÇALHO COM LOGO MUNDO SENAI -->
+        <header>
+            <div class="logo-mundo-senai" aria-label="Logotipo Mundo SENAI">
+                <img src="mundo senai1.png" alt="Mundo Senai" class="imagem">
+            </div>
+            <span class="h4" style="color: var(--cor-acao);">Edição Especial</span>
+        </header>
+
+        <!-- ======================================================================
+         1. TELA INICIAL (MENU PRINCIPAL)
+         ====================================================================== -->
+        <section id="screen-start" class="screen active">
+            <div class="welcome-card">
+                <h1>Jogo Pegue!</h1>
+                <p>Teste os seus reflexos! Clique no objeto em movimento o máximo de vezes que conseguir antes que o
+                    tempo acabe.</p>
+
+                <!-- Campo de Texto (Nome do Jogador) -->
+                <div class="input-group" id="player-input-group">
+                    <label for="player-name">Nome do Participante</label>
+                    <div class="input-field-wrapper">
+                        <input type="text" id="player-name" class="input-text" placeholder="Digite o seu nome completo"
+                            maxlength="25">
+                        <div class="error-icon" title="Campo obrigatório">!</div>
+                    </div>
+                    <span class="input-error-msg">Por favor, informe o seu nome para iniciar.</span>
+                </div>
+
+                <!-- Seleção de Dificuldade (Radio Buttons conforme Design System) -->
+                <div style="width: 100%; text-align: left;">
+                    <label style="font-weight: 600;">Selecione o Nível de Dificuldade:</label>
+                    <div class="options-group">
+                        <label class="custom-radio">
+                            <input type="radio" name="difficulty" value="facil" checked>
+                            <span>Fácil</span>
+                        </label>
+                        <label class="custom-radio">
+                            <input type="radio" name="difficulty" value="medio">
+                            <span>Médio</span>
+                        </label>
+                        <label class="custom-radio">
+                            <input type="radio" name="difficulty" value="dificil">
+                            <span>Difícil</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botão Normal (Vermelho) para iniciar -->
+                <button id="btn-start" class="btn btn-normal">Iniciar Jogo</button>
+            </div>
+            <div class="leaderboard-section">
+                <h3>Ranking Geral (Top 10)</h3>
+                <ul class="leaderboard-list" id="start-leaderboard-list">
+                    <!-- Gerado Dinamicamente via JS -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+         2. TELA DE PARTIDA (GAMEPLAY)
+         ====================================================================== -->
+        <section id="screen-game" class="screen">
+            <!-- Painel de Informações (HUD) -->
+            <div class="hud">
+                <div class="hud-item">
+                    <span class="hud-label">Jogador</span>
+                    <span id="hud-player" class="hud-value" style="font-size: 16px;">-</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Tempo</span>
+                    <span id="hud-timer" class="hud-value">30s</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Pontuação</span>
+                    <span id="hud-score" class="hud-value">0</span>
+                </div>
+            </div>
+
+            <!-- Arena onde o objeto se movimenta continuamente -->
+            <div id="game-arena" class="game-arena">
+                <div id="target-object" class="target-object" aria-label="Alvo do jogo">
+                    <!-- Ícone Engrenagem SENAI SVG -->
+                    <svg class="target-inner-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================
+         3. TELA DE FIM DE JOGO (RESULTADOS)
+         ====================================================================== -->
+        <section id="screen-result" class="screen">
+            <div class="results-card">
+                <h2>Fim de Partida!</h2>
+                <p>Parabéns por participar do evento <strong>Mundo SENAI</strong>.</p>
+
+                <div class="score-display">
+                    <p class="h4" style="color: var(--cor-preto);">Pontuação Alcançada</p>
+                    <div id="final-score" class="score-number">0</div>
+                    <p id="final-player-name" class="p" style="font-weight: 600;">Jogador: -</p>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <p class="hud-label">Cliques Certos</p>
+                            <p id="stat-hits" class="h3" style="color: var(--cor-acao);">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <p class="hud-label">Dificuldade</p>
+                            <p id="stat-level" class="h3" style="color: var(--cor-preto);">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <!-- Botão Normal (Vermelho) para Jogar Novamente -->
+                    <button id="btn-restart" class="btn btn-normal">Jogar Novamente</button>
+                    <!-- Botão Alternativo (Branco com borda) para voltar ao menu -->
+                    <button id="btn-menu" class="btn btn-alternativo">Voltar ao Menu</button>
+                </div>
+            </div>
+            <div class="leaderboard-section">
+                <h3>Ranking Geral (Top 10)</h3>
+                <ul class="leaderboard-list" id="result-leaderboard-list">
+                    <!-- Gerado Dinamicamente via JS -->
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Script Separado -->
+    <script src="script.js"></script>
+</body>
+
+</html>

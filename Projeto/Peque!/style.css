@@ -1,0 +1,603 @@
+/* ==========================================================================
+   DESIGN SYSTEM - VARIÁVEIS DE COR E ESTILOS BASE
+   ========================================================================== */
+:root {
+  --cor-primaria: #C1272C;
+  --cor-primaria-hover: #9E1B20;
+  --cor-primaria-disabled: #F7B5B7;
+  
+  --cor-secundaria: #FFF6EA;
+  --cor-acao: #164194;
+  --cor-cinza: #D0D0D0;
+  --cor-preto: #282828;
+  --cor-fundo: #F5F6F8;
+  --cor-branco: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-preto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   HIERARQUIA TIPOGRÁFICA (Design System)
+   ========================================================================== */
+h1, .h1 {
+  font-size: 48px;
+  line-height: 60px;
+  font-weight: 800;
+}
+
+h2, .h2 {
+  font-size: 34px;
+  line-height: 50px;
+  font-weight: 700;
+}
+
+h3, .h3 {
+  font-size: 28px;
+  line-height: 38px;
+  font-weight: 700;
+}
+
+h4, .h4 {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+p, label, span, .p {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   COMPONENTES: BOTÕES (Design System)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  outline: none;
+  text-decoration: none;
+  min-width: 160px;
+  text-align: center;
+}
+
+/* Botão Normal (Vermelho Padrão) */
+.btn-normal {
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+}
+
+.btn-normal:hover:not(:disabled) {
+  background-color: var(--cor-primaria-hover);
+}
+
+.btn-normal:disabled {
+  background-color: var(--cor-primaria-disabled);
+  color: var(--cor-branco);
+  cursor: not-allowed;
+}
+
+/* Botão Alternativo (Branco com Borda) */
+.btn-alternativo {
+  background-color: var(--cor-branco);
+  color: var(--cor-preto);
+  border-color: var(--cor-cinza);
+}
+
+.btn-alternativo:hover:not(:disabled) {
+  background-color: #EFEFEF;
+  border-color: var(--cor-preto);
+}
+
+.btn-alternativo:disabled {
+  background-color: var(--cor-branco);
+  color: var(--cor-cinza);
+  border-color: var(--cor-cinza);
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   COMPONENTES: INPUTS, RADIO E CHECKBOX (Design System)
+   ========================================================================== */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+}
+
+.input-group label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--cor-preto);
+}
+
+.input-field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-text {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--cor-cinza);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--cor-preto);
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: var(--cor-branco);
+}
+
+.input-text::placeholder {
+  color: #A0A0A0;
+}
+
+.input-text:focus {
+  border-color: var(--cor-acao);
+}
+
+/* Estado de Erro no Input */
+.input-group.error .input-text {
+  border-color: var(--cor-primaria);
+  padding-right: 40px;
+}
+
+.input-group .error-icon {
+  display: none;
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--cor-primaria);
+  color: var(--cor-branco);
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 13px;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-group.error .error-icon {
+  display: flex;
+}
+
+.input-error-msg {
+  color: var(--cor-primaria);
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+.input-group.error .input-error-msg {
+  display: block;
+}
+
+/* Radio Buttons & Checkboxes */
+.options-group {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0 24px 0;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.custom-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.custom-radio input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cor-cinza);
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: var(--cor-branco);
+}
+
+.custom-radio input[type="radio"]:checked {
+  border-color: var(--cor-acao);
+}
+
+.custom-radio input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--cor-acao);
+  border-radius: 50%;
+}
+
+/* Checkbox */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cor-cinza);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  background-color: var(--cor-branco);
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: var(--cor-acao);
+  border-color: var(--cor-acao);
+}
+
+.custom-checkbox input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  top: -2px;
+  left: 3px;
+}
+
+/* ==========================================================================
+   ESTRUTURA DAS TELAS E CABEÇALHO
+   ========================================================================== */
+.container {
+  width: 90%;
+  max-width: 800px;
+  background-color: var(--cor-branco);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--cor-fundo);
+}
+
+/* Logo Mundo SENAI fiel às cores e estilo original */
+.logo-mundo-senai {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 0.85;
+  font-style: italic;
+  font-weight: 900;
+}
+
+.logo-mundo-senai .txt-mundo {
+  color: #EB3C6E; /* Hot Pink */
+  font-size: 26px;
+  letter-spacing: 0.5px;
+}
+
+.logo-mundo-senai .txt-senai {
+  color: #2672BC; /* Azul Médio SENAI */
+  font-size: 27px;
+  letter-spacing: 0.5px;
+}
+
+/* Gerenciamento de Visibilidade de Telas */
+.screen {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   TELA INICIAL
+   ========================================================================== */
+.welcome-card {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-card h1 {
+  color: var(--cor-primaria);
+  margin-bottom: 8px;
+}
+
+.welcome-card p {
+  color: var(--cor-preto);
+  margin-bottom: 24px;
+}
+
+/* ==========================================================================
+   TELA DE JOGO E ÁREA DE MOVIMENTAÇÃO DO OBJETO
+   ========================================================================== */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--cor-secundaria);
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #FFE4C4;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hud-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #885500;
+  text-transform: uppercase;
+}
+
+.hud-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--cor-preto);
+}
+
+.game-arena {
+  width: 100%;
+  height: 420px;
+  background-color: var(--cor-fundo);
+  border: 2px dashed var(--cor-cinza);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+/* Objeto Clicável (Movimento Contínuo) */
+.target-object {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #FF5A5F, var(--cor-primaria));
+  box-shadow: 0 4px 12px rgba(193, 39, 44, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.05s ease;
+  will-change: left, top;
+}
+
+.target-object:active {
+  transform: scale(0.85);
+}
+
+.target-inner-icon {
+  width: 60%;
+  height: 60%;
+  fill: var(--cor-branco);
+}
+
+/* Animação Flutuante ao Clicar (+Pontos) */
+.score-popup {
+  position: absolute;
+  color: var(--cor-acao);
+  font-weight: 800;
+  font-size: 20px;
+  pointer-events: none;
+  animation: floatUp 0.6s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-35px) scale(1.3); }
+}
+
+/* ==========================================================================
+   TELA FINAL / RESULTADOS
+   ========================================================================== */
+.results-card {
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.results-card h2 {
+  color: var(--cor-acao);
+  margin-bottom: 12px;
+}
+
+.score-display {
+  background-color: var(--cor-secundaria);
+  padding: 24px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #FFE4C4;
+}
+
+.score-number {
+  font-size: 56px;
+  font-weight: 900;
+  color: var(--cor-primaria);
+  line-height: 1;
+  margin: 8px 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.imagem{
+    height: 15vh;
+}
+.stat-box {
+  background: var(--cor-branco);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cor-cinza);
+}
+
+.results-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .container { padding: 20px 16px; }
+  h1 { font-size: 36px; line-height: 46px; }
+  h2 { font-size: 26px; line-height: 36px; }
+  .game-arena { height: 350px; }
+  .options-group { flex-direction: column; gap: 10px; }
+  .results-actions { flex-direction: column; width: 100%; }
+  .btn { width: 100%; }
+}
+/* ==========================================================================
+   PLACAR DE LÍDERES (LEADERBOARD) - ORDENADO MAIOR PARA MENOR
+   ========================================================================== */
+.leaderboard-section {
+  width: 100%;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--cor-cinza);
+  border-radius: 8px;
+  background-color: var(--cor-branco);
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--cor-fundo);
+  transition: background-color 0.2s ease;
+}
+
+.leaderboard-item:hover {
+  background-color: var(--cor-fundo);
+}
+
+/* Destaque para o Podio Top 3 */
+.leaderboard-item.rank-1 {
+  background-color: #FFFDF0;
+  border-left: 4px solid #FFD700;
+}
+
+.leaderboard-item.rank-2 {
+  background-color: #F8F9FA;
+  border-left: 4px solid #C0C0C0;
+}
+
+.leaderboard-item.rank-3 {
+  background-color: #FFF8F5;
+  border-left: 4px solid #CD7F32;
+}
+
+.rank-pos {
+  font-weight: 800;
+  font-size: 14px;
+  width: 32px;
+  color: var(--cor-acao);
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--cor-preto);
+}
+
+.player-diff {
+  font-size: 11px;
+  color: #777;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.player-score {
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--cor-primaria);
+}
